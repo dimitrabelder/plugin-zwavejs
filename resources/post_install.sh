@@ -8,7 +8,13 @@ BASEDIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 cd $BASEDIR
 cd zwave-js-ui
 sudo yarn install
-sudo yarn run build
+if [[ $RPI_BOARD_REVISION ==  "a02082" || $RPI_BOARD_REVISION == "a22082" || $RPI_BOARD_REVISION == "a020d3" ]]
+then
+  # Mémoire insuffisante sur RPI3
+  sudo NODE_OPTIONS="--max_old_space_size=2048" yarn run build
+else
+  sudo yarn run build
+fi
 chown -R www-data:www-data *
 
 if [ -e /dev/ttyAMA0 ];  then 
